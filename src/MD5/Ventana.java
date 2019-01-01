@@ -53,6 +53,7 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
     
     int fileSelect = 0;
     public static String f1,f2;
+    public static Boolean isEquals;
     
     /**
      * Creates new form Ventana
@@ -122,8 +123,6 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
                         f2 = list.get(j).toString();
                         File name = new File(list.get(j).toString());
                         String Filename = name.getName();
-                        long a = name.length();
-                        System.err.println(a);
                         nameFile2.setText(Filename);
                         BufferedImage image = JIconExtractor.getJIconExtractor().extractIconFromFile((File) list.get(j), IconSize.EXTRALARGE);
                         Icon icono = new ImageIcon(image);
@@ -304,13 +303,10 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (f1!=null && f2!=null) {
             
-        Boolean isEquals = checksum(f1, f2);
-        System.out.println("Equals? " + isEquals);
+        isEquals = checksum(f1, f2);
         if (isEquals) {
-            estado.setBackground(Color.green);
             estado.setText("Son iguales");
         }else{
-            estado.setBackground(Color.red);
             estado.setText("Son diferentes");
         }
         info.setVisible(true);
@@ -325,6 +321,9 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
         abrir.setVisible(true);
     }//GEN-LAST:event_infoMouseClicked
 
+    
+    public static String hash1, hash2;
+    
     private FileInputStream openFile(String fileName) throws FileNotFoundException {
         return (new FileInputStream(fileName));
     }
@@ -337,17 +336,18 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
             file1 = openFile(filePath1);
             file2 = openFile(filePath2);
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error #1: "+e);
+            JOptionPane.showMessageDialog(this, "¡Archivo invalido!\nReinicia el software.", "Información", JOptionPane.INFORMATION_MESSAGE);
             System.exit(-1);
         }
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error #2: "+e);
             System.exit(-1);
         }
-        String hash1 = generateHashForFile(file1, md);
-        String hash2 = generateHashForFile(file2, md);
+        hash1 = generateHashForFile(file1, md);
+        hash2 = generateHashForFile(file2, md);
         return (hash1.equals(hash2));
     }
 
@@ -357,7 +357,7 @@ public class Ventana extends javax.swing.JFrame implements DropTargetListener{
         try {
             while (fileDigest.read() != -1);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error #3: "+e);
             System.exit(-1);
         }
         byte[] digested1 = md.digest();

@@ -5,6 +5,9 @@
  */
 package MD5;
 
+import java.io.File;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Yonathan
@@ -17,6 +20,7 @@ public class informacion extends javax.swing.JDialog {
     public informacion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        llenarTAbla();
     }
 
     /**
@@ -29,11 +33,12 @@ public class informacion extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaInfo = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Informacion adicional");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -49,7 +54,7 @@ public class informacion extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaInfo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -57,7 +62,7 @@ public class informacion extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 922, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -71,6 +76,16 @@ public class informacion extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void llenarTAbla(){
+        DefaultTableModel modelo = (DefaultTableModel) tablaInfo.getModel(); 
+        File file1 = new File(Ventana.f1);
+        Object[] object = new Object[]{file1.getName(), file1.getPath(), Ventana.hash1, file1.hashCode(),file1.length()+" bytes"};
+        modelo.addRow(object);
+        File file2 = new File(Ventana.f2);
+        Object[] object2 = new Object[]{file2.getName(), file2.getPath(), Ventana.hash2, file2.hashCode(),file2.length()+" bytes"};
+        modelo.addRow(object2);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -115,6 +130,6 @@ public class informacion extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable tablaInfo;
     // End of variables declaration//GEN-END:variables
 }
